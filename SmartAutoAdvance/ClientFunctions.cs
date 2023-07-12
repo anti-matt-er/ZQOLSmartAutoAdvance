@@ -177,13 +177,13 @@ namespace SmartAutoAdvance
 
                 path = path.ToLowerInvariant();
 #if DEBUG
-                PluginLog.LogInformation($".scd played: {path}", path);
+                PluginLog.Information($".scd played: {path}", path);
 #endif
                 OnPlaySpecificSoundEvent(new PlaySpecificSoundEventArgs(path, idx));
             }
             catch (Exception ex)
             {
-                PluginLog.LogError(ex, "Error in PlaySpecificSoundDetour!");
+                PluginLog.Error(ex, "Error in PlaySpecificSoundDetour!");
             }
 
             return this.playSpecificSoundHook!.Original(a1, idx);
@@ -240,7 +240,7 @@ namespace SmartAutoAdvance
             }
             catch (Exception ex)
             {
-                PluginLog.LogError(ex, "Error in LoadSoundFileDetour!");
+                PluginLog.Error(ex, "Error in LoadSoundFileDetour!");
             }
 
             return ret;
