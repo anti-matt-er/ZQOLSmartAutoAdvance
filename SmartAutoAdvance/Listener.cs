@@ -27,7 +27,7 @@ namespace SmartAutoAdvance
     {
         private readonly UIModule* pUIModuleInstance;
 
-        private delegate nint EnableCutsceneInputModeDelegate(UIModule* pUIModule, long a2);
+        private delegate nint EnableCutsceneInputModeDelegate(UIModule* pUIModule, nint a2);
 
         private delegate nint DisableCutsceneInputModeDelegate(UIModule* pUIModule);
 
