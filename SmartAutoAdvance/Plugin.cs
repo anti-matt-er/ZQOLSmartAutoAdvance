@@ -2,7 +2,6 @@ using Dalamud.Game;
 using Dalamud.Game.Command;
 using Dalamud.IoC;
 using Dalamud.Plugin;
-using System.IO;
 using Dalamud.Interface.Windowing;
 using SmartAutoAdvance.Windows;
 using Dalamud.Game.ClientState.Conditions;

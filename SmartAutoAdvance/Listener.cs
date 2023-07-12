@@ -1,15 +1,7 @@
 using System;
-using System.Collections.Concurrent;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using Dalamud.Game.ClientState.Conditions;
-using Dalamud.Hooking;
 using Dalamud.Logging;
-using Dalamud.Utility.Signatures;
-using FFXIVClientStructs.FFXIV.Client.System.Resource.Handle;
-using FFXIVClientStructs.FFXIV.Client.UI;
 
 namespace SmartAutoAdvance
 {
