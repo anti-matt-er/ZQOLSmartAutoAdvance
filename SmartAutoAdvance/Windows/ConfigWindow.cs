@@ -7,7 +7,7 @@ namespace SmartAutoAdvance.Windows;
 
 public class ConfigWindow : Window, IDisposable
 {
-    private Configuration Configuration;
+    private readonly Configuration configuration;
 
     private SmartAutoAdvancePlugin Plugin { get; }
 
@@ -21,17 +21,17 @@ public class ConfigWindow : Window, IDisposable
         this.Size = new Vector2(232, 75);
         this.SizeCondition = ImGuiCond.Always;
 
-        this.Configuration = plugin.Configuration;
+        this.configuration = plugin.Configuration;
     }
 
     public void Dispose() { }
 
     public override void Draw()
     {
-        var enabled = this.Configuration.Enabled;
+        var enabled = this.configuration.Enabled;
         if (ImGui.Checkbox("Enabled", ref enabled))
         {
-            this.Configuration.Enabled = enabled;
+            this.configuration.Enabled = enabled;
 
             if (enabled)
             {
@@ -42,15 +42,15 @@ public class ConfigWindow : Window, IDisposable
                 this.Plugin.Listener.Disable();
             }
 
-            this.Configuration.Save();
+            this.configuration.Save();
         }
 
-        var enabledInParty = this.Configuration.ForceEnableInParty;
+        var enabledInParty = this.configuration.ForceEnableInParty;
         if (ImGui.Checkbox("Re-enable auto-advance for unvoiced cutscenes when in a party", ref enabledInParty))
         {
-            this.Configuration.ForceEnableInParty = enabledInParty;
+            this.configuration.ForceEnableInParty = enabledInParty;
             // can save immediately on change, if you don't want to provide a "Save and Close" button
-            this.Configuration.Save();
+            this.configuration.Save();
         }
     }
 }
