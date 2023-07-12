@@ -240,7 +240,7 @@ namespace SmartAutoAdvance
             }
             catch (Exception ex)
             {
-                PluginLog.LogError(ex, "Error in LoadSoundFileDetour");
+                PluginLog.LogError(ex, "Error in LoadSoundFileDetour!");
             }
 
             return ret;
