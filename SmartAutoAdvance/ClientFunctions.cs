@@ -28,6 +28,10 @@ namespace SmartAutoAdvance
 
         private const int ResourceDataPointerOffset = 0xB0;
 
+        private delegate nint EnableCutsceneInputModeDelegate(UIModule* pUIModule, nint a2);
+
+        private delegate nint DisableCutsceneInputModeDelegate(UIModule* pUIModule);
+
         private delegate void* PlaySpecificSoundDelegate(long a1, int idx);
 
         private delegate void* GetResourceSyncPrototype(IntPtr pFileManager, uint* pCategoryId, char* pResourceType, uint* pResourceHash, char* pPath, void* pUnknown);
@@ -36,15 +40,11 @@ namespace SmartAutoAdvance
 
         private delegate IntPtr LoadSoundFileDelegate(IntPtr resourceHandle, uint a2);
 
-        private delegate nint EnableCutsceneInputModeDelegate(UIModule* pUIModule, nint a2);
+        [Signature("48 89 5C 24 ?? 57 48 83 EC 20 48 8D 99 ?? ?? ?? ?? 48 8B F9 80 7B 25 00", DetourName=nameof(EnableCutsceneInputModeDetour))]
+        private readonly Hook<EnableCutsceneInputModeDelegate>? enableCutsceneInputModeHook = null;
 
-        private delegate nint DisableCutsceneInputModeDelegate(UIModule* pUIModule);
-
-        [Signature("48 89 5C 24 ?? 57 48 83 EC 20 48 8D 99 ?? ?? ?? ?? 48 8B F9 80 7B 25 00")]
-        private readonly EnableCutsceneInputModeDelegate? enableCutsceneInputMode = null;
-
-        [Signature("48 89 5C 24 ?? 57 48 83 EC 20 48 8B F9 48 81 C1 ?? ?? ?? ?? E8 ?? ?? ?? ?? 48 8B 07")]
-        private readonly DisableCutsceneInputModeDelegate? disableCutsceneInputMode = null;
+        [Signature("48 89 5C 24 ?? 57 48 83 EC 20 48 8B F9 48 81 C1 ?? ?? ?? ?? E8 ?? ?? ?? ?? 48 8B 07", DetourName = nameof(DisableCutsceneInputModeDetour))]
+        private readonly Hook<DisableCutsceneInputModeDelegate>? disableCutsceneInputModeHook = null;
 
         [Signature("48 89 5C 24 ?? 48 89 74 24 ?? 57 48 83 EC 20 33 F6 8B DA 48 8B F9 0F BA E2 0F", DetourName=nameof(PlaySpecificSoundDetour))]
         private readonly Hook<PlaySpecificSoundDelegate>? playSpecificSoundHook = null;
@@ -128,22 +128,30 @@ namespace SmartAutoAdvance
 
         public void EnableCutsceneInputMode()
         {
-            if (this.enableCutsceneInputMode == null)
-                throw new InvalidOperationException("EnableCutsceneInputMode signature wasn't found!");
-
-            this.enableCutsceneInputMode(this.pUIModuleInstance, 35); // figure out what a2 is
+            this.enableCutsceneInputModeHook!.Original(this.pUIModuleInstance, 35); // figure out what a2 is
 
             return;
         }
 
         public void DisableCutsceneInputMode()
         {
-            if (this.disableCutsceneInputMode == null)
-                throw new InvalidOperationException("DisableCutsceneInputMode signature wasn't found!");
-
-            this.disableCutsceneInputMode(this.pUIModuleInstance);
+            this.disableCutsceneInputModeHook!.Original(this.pUIModuleInstance);
 
             return;
+        }
+
+        private nint EnableCutsceneInputModeDetour(UIModule* pUIModule, nint a2)
+        {
+            PluginLog.Information($"Client: EnableCutsceneInputMode(a1: {*pUIModule}, a2: {a2})", *pUIModule, a2);
+
+            return this.enableCutsceneInputModeHook!.Original(pUIModule, a2);
+        }
+
+        private nint DisableCutsceneInputModeDetour(UIModule* pUIModule)
+        {
+            PluginLog.Information($"Client: DisableCutsceneInputMode(a1: {*pUIModule})", *pUIModule);
+
+            return this.disableCutsceneInputModeHook!.Original(pUIModule);
         }
 
         private void* PlaySpecificSoundDetour(long a1, int idx)
