@@ -46,16 +46,16 @@ namespace SmartAutoAdvance
         [Signature("48 89 5C 24 ?? 57 48 83 EC 20 48 8B F9 48 81 C1 ?? ?? ?? ?? E8 ?? ?? ?? ?? 48 8B 07")]
         private readonly DisableCutsceneInputModeDelegate? disableCutsceneInputMode = null;
 
-        [Signature("48 89 5C 24 ?? 48 89 74 24 ?? 57 48 83 EC 20 33 F6 8B DA 48 8B F9 0F BA E2 0F")]
+        [Signature("48 89 5C 24 ?? 48 89 74 24 ?? 57 48 83 EC 20 33 F6 8B DA 48 8B F9 0F BA E2 0F", DetourName=nameof(PlaySpecificSoundDetour))]
         private readonly Hook<PlaySpecificSoundDelegate>? playSpecificSoundHook = null;
 
-        [Signature("E8 ?? ?? ?? ?? 48 8D 8F ?? ?? ?? ?? 48 89 87 ?? ?? ?? ?? 48 8D 54 24")]
+        [Signature("E8 ?? ?? ?? ?? 48 8D 8F ?? ?? ?? ?? 48 89 87 ?? ?? ?? ?? 48 8D 54 24", DetourName=nameof(GetResourceSyncDetour))]
         private readonly Hook<GetResourceSyncPrototype>? getResourceSyncHook = null;
 
-        [Signature("E8 ?? ?? ?? ?? 48 8B D8 EB 07 F0 FF 83")]
+        [Signature("E8 ?? ?? ?? ?? 48 8B D8 EB 07 F0 FF 83", DetourName=nameof(GetResourceAsyncDetour))]
         private readonly Hook<GetResourceAsyncPrototype>? getResourceAsyncHook = null;
 
-        [Signature("E8 ?? ?? ?? ?? 48 85 C0 75 04 B0 F6")]
+        [Signature("E8 ?? ?? ?? ?? 48 85 C0 75 04 B0 F6", DetourName=nameof(LoadSoundFileDetour))]
         private readonly Hook<LoadSoundFileDelegate>? loadSoundFileHook = null;
 
         private ConcurrentDictionary<IntPtr, string> Scds { get; } = new();
