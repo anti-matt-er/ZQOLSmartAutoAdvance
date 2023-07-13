@@ -13,7 +13,7 @@ namespace SmartAutoAdvance
     {
         public string Name => "Smart text auto-advance";
         private const string ShortCommandName = "/staa";
-        private const string LongCommandName = "/SmartTextAutoAdvance";
+        private const string LongCommandName = "/smarttextautoadvance";
 
         private DalamudPluginInterface PluginInterface { get; init; }
         private CommandManager CommandManager { get; init; }
