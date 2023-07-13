@@ -47,7 +47,7 @@ namespace SmartAutoAdvance
             // common CommandInfo for all aliases
             this.CommandInfo = new CommandInfo(OnCommand)
             {
-                HelpMessage = "Opens the Smart Text Auto-Advance config window"
+                HelpMessage = "Opens the Smart Text Auto-Advance config window.\nUse /staa toggle to manually toggle Auto-Advance"
             };
 
             this.Configuration = this.PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
@@ -85,8 +85,16 @@ namespace SmartAutoAdvance
 
         private void OnCommand(string command, string args)
         {
-            // in response to the slash command, open the config
-            ConfigWindow.IsOpen = true;
+            // Toggle config window when no args are used
+            if (args == "")
+            {
+                ConfigWindow.IsOpen = !ConfigWindow.IsOpen;
+            }
+
+            if (args.ToLower() == "toggle")
+            {
+                this.Listener.ToggleAutoAdvance();
+            }
         }
 
         private void DrawUI()

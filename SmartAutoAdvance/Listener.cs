@@ -51,6 +51,11 @@ namespace SmartAutoAdvance
             this.clientFunctions.Dispose();
         }
 
+        public void ToggleAutoAdvance()
+        {
+            this.clientFunctions.AutoAdvanceEnabled = !this.clientFunctions.AutoAdvanceEnabled;
+        }
+
         internal void OnConditionChanged(ConditionFlag flag, bool value)
         {
 #if DEBUG
