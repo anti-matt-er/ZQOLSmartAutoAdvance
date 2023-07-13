@@ -1,6 +1,7 @@
 using System;
 using System.Text.RegularExpressions;
 using Dalamud.Game.ClientState.Conditions;
+using Dalamud.Game.ClientState.Party;
 using Dalamud.Logging;
 
 namespace SmartAutoAdvance
@@ -56,6 +57,12 @@ namespace SmartAutoAdvance
             this.clientFunctions.AutoAdvanceEnabled = !this.clientFunctions.AutoAdvanceEnabled;
         }
 
+        private bool IsInParty()
+        {
+            // Greater than 1 is used here just in case there's such thing as a "solo party"
+            return this.Plugin.PartyList.Length > 1;
+        }
+
         internal void OnConditionChanged(ConditionFlag flag, bool value)
         {
 #if DEBUG
@@ -67,12 +74,20 @@ namespace SmartAutoAdvance
                 flag == ConditionFlag.OccupiedInCutSceneEvent
             ))
             {
-
                 if (value)
                 {
-                    PluginLog.Information("Cutscene started, disabling auto-advance!");
+                    if (this.Plugin.Configuration.ForceEnableInParty && IsInParty())
+                    {
+                        PluginLog.Information("Cutscene started in a party, enabling auto-advance!");
 
-                    this.clientFunctions.AutoAdvanceEnabled = false;
+                        this.clientFunctions.AutoAdvanceEnabled = true;
+                    }
+                    else
+                    {
+                        PluginLog.Information("Cutscene started, disabling auto-advance!");
+
+                        this.clientFunctions.AutoAdvanceEnabled = false;
+                    }
                 }
 
                 this.InNewCutscene = value;

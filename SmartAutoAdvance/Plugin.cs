@@ -5,6 +5,7 @@ using Dalamud.Plugin;
 using Dalamud.Interface.Windowing;
 using SmartAutoAdvance.Windows;
 using Dalamud.Game.ClientState.Conditions;
+using Dalamud.Game.ClientState.Party;
 
 namespace SmartAutoAdvance
 {
@@ -31,18 +32,23 @@ namespace SmartAutoAdvance
         [PluginService]
         internal Condition Condition { get; init; } = null!;
 
+        [PluginService]
+        internal PartyList PartyList { get; init; } = null!;
+
         internal Listener Listener { get; }
 
         public SmartAutoAdvancePlugin(
             [RequiredVersion("1.0")] DalamudPluginInterface pluginInterface,
             [RequiredVersion("1.0")] CommandManager commandManager,
             [RequiredVersion("1.0")] SigScanner sigScanner,
-            [RequiredVersion("1.0")] Condition condition)
+            [RequiredVersion("1.0")] Condition condition,
+            [RequiredVersion("1.0")] PartyList partyList)
         {
             this.PluginInterface = pluginInterface;
             this.CommandManager = commandManager;
             this.SigScanner = sigScanner;
             this.Condition = condition;
+            this.PartyList = partyList;
 
             // common CommandInfo for all aliases
             this.CommandInfo = new CommandInfo(OnCommand)
