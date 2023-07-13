@@ -1,8 +1,9 @@
 using Dalamud.Hooking;
 using Dalamud.Logging;
 using Dalamud.Utility.Signatures;
+using FFXIVClientStructs.FFXIV.Client.System.Framework;
 using FFXIVClientStructs.FFXIV.Client.System.Resource.Handle;
-using FFXIVClientStructs.FFXIV.Client.UI;
+using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using System;
 using System.Collections.Concurrent;
 using System.Runtime.InteropServices;
@@ -24,13 +25,11 @@ namespace SmartAutoAdvance
 
     internal unsafe class ClientFunctions : IDisposable
     {
-        private readonly IntPtr pUIModuleInstance;
+        private readonly IntPtr pCutsceneAgent;
 
         private const int ResourceDataPointerOffset = 0xB0;
 
-        private delegate nint EnableCutsceneInputModeDelegate(IntPtr pUIModule, nint a2);
-
-        private delegate nint DisableCutsceneInputModeDelegate(IntPtr pUIModule);
+        private delegate nint ToggleAutoAdvanceDelegate(nint a1, nint a2, nint a3);
 
         private delegate void* PlaySpecificSoundDelegate(long a1, int idx);
 
@@ -40,11 +39,8 @@ namespace SmartAutoAdvance
 
         private delegate IntPtr LoadSoundFileDelegate(IntPtr resourceHandle, uint a2);
 
-        [Signature("48 89 5C 24 ?? 57 48 83 EC 20 48 8D 99 ?? ?? ?? ?? 48 8B F9 80 7B 25 00", DetourName=nameof(EnableCutsceneInputModeDetour))]
-        private readonly Hook<EnableCutsceneInputModeDelegate>? enableCutsceneInputModeHook = null;
-
-        [Signature("48 89 5C 24 ?? 57 48 83 EC 20 48 8B F9 48 81 C1 ?? ?? ?? ?? E8 ?? ?? ?? ?? 48 8B 07", DetourName = nameof(DisableCutsceneInputModeDetour))]
-        private readonly Hook<DisableCutsceneInputModeDelegate>? disableCutsceneInputModeHook = null;
+        [Signature("48 89 5C 24 08 48 89 74 24 10 57 48 83 EC 20 48 8B 49 10 41 0F B6 F0")]
+        private readonly ToggleAutoAdvanceDelegate? toggleAutoAdvanceDelegate = null;
 
         [Signature("48 89 5C 24 ?? 48 89 74 24 ?? 57 48 83 EC 20 33 F6 8B DA 48 8B F9 0F BA E2 0F", DetourName=nameof(PlaySpecificSoundDetour))]
         private readonly Hook<PlaySpecificSoundDelegate>? playSpecificSoundHook = null;
@@ -80,17 +76,9 @@ namespace SmartAutoAdvance
                 {
                     autoAdvanceEnabled = value;
 
-                    if (value)
-                    {
-                        this.EnableCutsceneInputMode();
-                    }
-                    else
-                    {
-                        this.DisableCutsceneInputMode();
-                    }
-#if DEBUG
-                    PluginLog.LogInformation($"autoAdvanceEnabled set to [{value}]", value);
-#endif
+                    this.ToggleAutoAdvance(value);
+
+                    PluginLog.LogInformation($"Auto-advance set to [{value}]", value);
                 }
 
                 return;
@@ -101,10 +89,8 @@ namespace SmartAutoAdvance
         {
             SignatureHelper.Initialise(this);
 
-            this.pUIModuleInstance = new IntPtr(UIModule.Instance());
+            this.pCutsceneAgent = new IntPtr(Framework.Instance()->GetUiModule()->GetAgentModule()->GetAgentByInternalId(AgentId.Cutscene));
 
-            this.enableCutsceneInputModeHook?.Enable();
-            this.disableCutsceneInputModeHook?.Enable();
             this.playSpecificSoundHook?.Enable();
             this.loadSoundFileHook?.Enable();
             this.getResourceSyncHook?.Enable();
@@ -113,8 +99,6 @@ namespace SmartAutoAdvance
 
         public void Dispose()
         {
-            this.enableCutsceneInputModeHook?.Dispose();
-            this.disableCutsceneInputModeHook?.Dispose();
             this.playSpecificSoundHook?.Dispose();
             this.loadSoundFileHook?.Dispose();
             this.getResourceSyncHook?.Dispose();
@@ -123,40 +107,20 @@ namespace SmartAutoAdvance
 
         internal void Disable()
         {
-            this.enableCutsceneInputModeHook?.Disable();
-            this.disableCutsceneInputModeHook?.Disable();
             this.playSpecificSoundHook?.Disable();
             this.loadSoundFileHook?.Disable();
             this.getResourceSyncHook?.Disable();
             this.getResourceAsyncHook?.Disable();
         }
 
-        public void EnableCutsceneInputMode()
+        public void ToggleAutoAdvance(bool value)
         {
-            this.enableCutsceneInputModeHook!.Original(this.pUIModuleInstance, 35); // figure out what a2 is, "35" is irrelevant
+            if (this.toggleAutoAdvanceDelegate == null)
+                throw new InvalidOperationException("ToggleAutoAdvance signature wasn't found!");
+
+            this.toggleAutoAdvanceDelegate(this.pCutsceneAgent, 0, value ? 0 : 1);
 
             return;
-        }
-
-        public void DisableCutsceneInputMode()
-        {
-            this.disableCutsceneInputModeHook!.Original(this.pUIModuleInstance);
-
-            return;
-        }
-
-        private nint EnableCutsceneInputModeDetour(IntPtr pUIModule, nint a2)
-        {
-            PluginLog.Information($"Client: EnableCutsceneInputMode(a1: {pUIModule}, a2: {a2})", pUIModule, a2);
-
-            return this.enableCutsceneInputModeHook!.Original(pUIModule, a2);
-        }
-
-        private nint DisableCutsceneInputModeDetour(IntPtr pUIModule)
-        {
-            PluginLog.Information($"Client: DisableCutsceneInputMode(a1: {pUIModule})", pUIModule);
-
-            return this.disableCutsceneInputModeHook!.Original(pUIModule);
         }
 
         private void* PlaySpecificSoundDetour(long a1, int idx)
