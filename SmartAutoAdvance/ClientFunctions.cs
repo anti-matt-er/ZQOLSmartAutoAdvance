@@ -29,7 +29,7 @@ namespace SmartAutoAdvance
 
         private const int ResourceDataPointerOffset = 0xB0;
 
-        private delegate nint ToggleAutoAdvanceDelegate(nint a1, nint a2, nint a3);
+        private delegate nint ToggleAutoAdvanceDelegate(IntPtr pAgent, uint togglePause, bool toggleAutoAdvance);
 
         private delegate void* PlaySpecificSoundDelegate(long a1, int idx);
 
@@ -118,7 +118,7 @@ namespace SmartAutoAdvance
             if (this.toggleAutoAdvanceDelegate == null)
                 throw new InvalidOperationException("ToggleAutoAdvance signature wasn't found!");
 
-            this.toggleAutoAdvanceDelegate(this.pCutsceneAgent, 0, value ? 0 : 1);
+            this.toggleAutoAdvanceDelegate(this.pCutsceneAgent, 0, false);
 
             return;
         }
