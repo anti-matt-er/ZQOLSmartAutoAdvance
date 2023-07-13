@@ -86,6 +86,9 @@ namespace SmartAutoAdvance
             this.CommandManager.RemoveHandler(ShortCommandName);
             this.CommandManager.RemoveHandler(LongCommandName);
 
+            this.PluginInterface.UiBuilder.Draw -= DrawUI;
+            this.PluginInterface.UiBuilder.OpenConfigUi -= DrawConfigUI;
+
             this.Listener.Dispose();
         }
 
