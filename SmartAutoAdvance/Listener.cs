@@ -47,6 +47,7 @@ namespace SmartAutoAdvance
         public void Dispose()
         {
             this.Plugin.Condition.ConditionChange -= OnConditionChanged;
+            this.clientFunctions.PlaySpecificSoundEvent -= OnPlaySpecificSound;
 
             this.clientFunctions.Dispose();
         }
