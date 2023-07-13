@@ -2,6 +2,13 @@
     "Author": "Anti-Matt-Er",
     "Name": "Smart text auto-advance",
     "Punchline": "Automatically toggles \"text auto-advance\" based on if a cutscene is voiced!",
-    "Description": "[TODO]",
-    "ApplicableVersion": "any"
+    "Description": "A quality-of-life plugin that automatically toggles FFXIV's \"Text Auto-Advance\" feature depending on whether or not the cutscene is voiced.\n\nExplanation:\nWhen a cutscene is started, the plugin will disable Auto-Advance. Then it \"listens\" for a voice line and, if detected, enables Auto-Advance again. By default, it also automatically enables Auto-Advance if you are in a party so that you don't accidentally waste their time (this is configurable if you don't like this behaviour).",
+    "ApplicableVersion": "any",
+    "DalamudApiLevel": 8,
+    "RepoUrl": "https://github.com/anti-matt-er/ZQOLSmartAutoAdvance",
+    "Tags": [
+        "QoL",
+        "Quality of Life",
+        "Cutscenes"
+    ]
 }
