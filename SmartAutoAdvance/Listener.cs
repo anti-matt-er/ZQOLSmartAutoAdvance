@@ -29,8 +29,8 @@ namespace SmartAutoAdvance
 
             this.InNewCutscene = false;
 
-            // Because true/false of the client function is cursed
-            this.clientFunctions.SetInitialAutoAdvance();
+            // To achieve consistent results, we set it to false upon plugin load
+            this.clientFunctions.SetAutoAdvance(false);
         }
 
         internal void Enable()

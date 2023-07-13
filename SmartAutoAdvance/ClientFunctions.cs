@@ -113,23 +113,23 @@ namespace SmartAutoAdvance
             this.getResourceAsyncHook?.Disable();
         }
 
-        public void SetInitialAutoAdvance()
-        {
-            if (this.toggleAutoAdvanceDelegate == null)
-                throw new InvalidOperationException("ToggleAutoAdvance signature wasn't found!");
-
-            this.toggleAutoAdvanceDelegate(this.pCutsceneAgent, 0, false);
-
-            return;
-        }
-
         private void ToggleAutoAdvance()
         {
+            // The only way to consistently set Auto-Advance in the client is to:
+            // 1. Set it to some known value once at the start (in the case of this plugin, `false` is used)
+            // 2. Set it to `false`, then set it to `true` every time a change is desired
+            // This will toggle it from the previous value (invert the bool)
+
+            this.SetAutoAdvance(false);
+            this.SetAutoAdvance(true);
+        }
+
+        public void SetAutoAdvance(bool value)
+        {
             if (this.toggleAutoAdvanceDelegate == null)
                 throw new InvalidOperationException("ToggleAutoAdvance signature wasn't found!");
 
-            this.toggleAutoAdvanceDelegate(this.pCutsceneAgent, 0, false);
-            this.toggleAutoAdvanceDelegate(this.pCutsceneAgent, 0, true);
+            this.toggleAutoAdvanceDelegate(this.pCutsceneAgent, 0, value);
 
             return;
         }
