@@ -56,11 +56,7 @@ namespace SmartAutoAdvance
             this.clientFunctions.AutoAdvanceEnabled = !this.clientFunctions.AutoAdvanceEnabled;
         }
 
-        private bool IsInParty()
-        {
-            // Greater than 1 is used here just in case there's such thing as a "solo party"
-            return this.Plugin.PartyList.Length > 1;
-        }
+        private bool IsInPartyWithOthers => this.Plugin.PartyList is { Length: > 1 };
 
         private void OnConditionChanged(ConditionFlag flag, bool value)
         {
@@ -75,7 +71,7 @@ namespace SmartAutoAdvance
             {
                 if (value)
                 {
-                    if (this.Plugin.Configuration.ForceEnableInParty && IsInParty())
+                    if (this.Plugin.Configuration.ForceEnableInParty && IsInPartyWithOthers)
                     {
                         PluginLog.Information("Cutscene started in a party, enabling auto-advance!");
 
