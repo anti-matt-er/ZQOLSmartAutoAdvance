@@ -101,7 +101,7 @@ namespace SmartAutoAdvance
                 return;
             }
 
-            // return early if .scd audio isn't cutscene
+            // return early if .scd audio isn't cutscene, to avoid the RegEx check
             if (!e.Path.StartsWith("cut/"))
             {
                 return;
