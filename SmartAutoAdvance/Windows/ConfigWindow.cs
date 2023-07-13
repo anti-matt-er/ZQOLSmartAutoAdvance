@@ -13,12 +13,15 @@ public class ConfigWindow : Window, IDisposable
 
     public ConfigWindow(SmartAutoAdvancePlugin plugin) : base(
         "Smart Text Auto-Advance Configuration",
-        ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoScrollbar |
-        ImGuiWindowFlags.NoScrollWithMouse)
+        ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse)
     {
         this.Plugin = plugin;
 
         this.Size = new Vector2(390, 85);
+        this.SizeConstraints = new WindowSizeConstraints
+        {
+            MinimumSize = (Vector2)this.Size
+        };
         this.SizeCondition = ImGuiCond.Always;
 
         this.configuration = plugin.Configuration;
