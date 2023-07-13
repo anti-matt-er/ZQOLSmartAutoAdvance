@@ -113,7 +113,7 @@ namespace SmartAutoAdvance
 
         public void DrawConfigUI()
         {
-            ConfigWindow.IsOpen = true;
+            ConfigWindow.IsOpen = !ConfigWindow.IsOpen;
         }
     }
 }
