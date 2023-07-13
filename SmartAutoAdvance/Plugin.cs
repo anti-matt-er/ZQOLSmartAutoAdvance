@@ -24,18 +24,18 @@ namespace SmartAutoAdvance
         private ConfigWindow ConfigWindow { get; init; }
 
         [PluginService]
-        internal SigScanner SigScanner { get; init; } = null!;
+        public SigScanner SigScanner { get; init; } = null!;
 
         [PluginService]
-        internal Framework Framework { get; init; } = null!;
+        public Framework Framework { get; init; } = null!;
 
         [PluginService]
-        internal Condition Condition { get; init; } = null!;
+        public Condition Condition { get; init; } = null!;
 
         [PluginService]
-        internal PartyList PartyList { get; init; } = null!;
+        public PartyList PartyList { get; init; } = null!;
 
-        internal Listener Listener { get; }
+        public Listener Listener { get; }
 
         public SmartAutoAdvancePlugin(
             [RequiredVersion("1.0")] DalamudPluginInterface pluginInterface,

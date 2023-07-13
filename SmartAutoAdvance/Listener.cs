@@ -5,7 +5,7 @@ using Dalamud.Logging;
 
 namespace SmartAutoAdvance
 {
-    internal static partial class VoValidator
+    public static partial class VoValidator
     {
         [GeneratedRegex(
             @"^cut/\w+/sound/[\w/]+/vo_\w+\.scd$",
@@ -15,7 +15,7 @@ namespace SmartAutoAdvance
         public static bool IsValid(string path) => MatchIfValid().IsMatch(path);
     }
 
-    internal unsafe class Listener : IDisposable
+    public unsafe class Listener : IDisposable
     {
         private SmartAutoAdvancePlugin Plugin { get; }
 
@@ -23,7 +23,7 @@ namespace SmartAutoAdvance
 
         private ClientFunctions clientFunctions { get; } = new();
 
-        internal Listener(SmartAutoAdvancePlugin plugin)
+        public Listener(SmartAutoAdvancePlugin plugin)
         {
             this.Plugin = plugin;
 
@@ -33,13 +33,13 @@ namespace SmartAutoAdvance
             this.clientFunctions.SetAutoAdvance(false);
         }
 
-        internal void Enable()
+        public void Enable()
         {
             this.Plugin.Condition.ConditionChange += OnConditionChanged;
             this.clientFunctions.PlaySpecificSoundEvent += OnPlaySpecificSound;
         }
 
-        internal void Disable()
+        public void Disable()
         {
             this.clientFunctions.Disable();
         }
@@ -62,7 +62,7 @@ namespace SmartAutoAdvance
             return this.Plugin.PartyList.Length > 1;
         }
 
-        internal void OnConditionChanged(ConditionFlag flag, bool value)
+        private void OnConditionChanged(ConditionFlag flag, bool value)
         {
 #if DEBUG
             PluginLog.Information($"Flag [{flag}] changed to [{value}]", flag, value);
@@ -93,7 +93,7 @@ namespace SmartAutoAdvance
             }
         }
 
-        internal void OnPlaySpecificSound(object? sender, PlaySpecificSoundEventArgs e)
+        private void OnPlaySpecificSound(object? sender, PlaySpecificSoundEventArgs e)
         {
             if (!this.InNewCutscene)
             {

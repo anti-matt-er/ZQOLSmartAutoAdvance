@@ -23,7 +23,7 @@ namespace SmartAutoAdvance
         public int Index { get; private set; }
     }
 
-    internal unsafe class ClientFunctions : IDisposable
+    public unsafe class ClientFunctions : IDisposable
     {
         private readonly IntPtr pCutsceneAgent;
 
