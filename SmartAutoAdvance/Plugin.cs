@@ -11,7 +11,7 @@ namespace SmartAutoAdvance
 {
     public sealed class SmartAutoAdvancePlugin : IDalamudPlugin
     {
-        public string Name => "[ZQoL] Smart text auto-advance";
+        public string Name => "Smart text auto-advance";
         private const string ShortCommandName = "/staa";
         private const string LongCommandName = "/SmartTextAutoAdvance";
 
