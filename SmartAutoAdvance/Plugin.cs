@@ -47,7 +47,7 @@ namespace SmartAutoAdvance
             // common CommandInfo for all aliases
             this.CommandInfo = new CommandInfo(OnCommand)
             {
-                HelpMessage = "Use /staa or /SmartTextAutoAdvance to open the config window"
+                HelpMessage = "Opens the Smart Text Auto-Advance config window"
             };
 
             this.Configuration = this.PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
