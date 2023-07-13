@@ -24,13 +24,13 @@ namespace SmartAutoAdvance
 
     internal unsafe class ClientFunctions : IDisposable
     {
-        private readonly UIModule* pUIModuleInstance;
+        private readonly IntPtr pUIModuleInstance;
 
         private const int ResourceDataPointerOffset = 0xB0;
 
-        private delegate nint EnableCutsceneInputModeDelegate(UIModule* pUIModule, nint a2);
+        private delegate nint EnableCutsceneInputModeDelegate(IntPtr pUIModule, nint a2);
 
-        private delegate nint DisableCutsceneInputModeDelegate(UIModule* pUIModule);
+        private delegate nint DisableCutsceneInputModeDelegate(IntPtr pUIModule);
 
         private delegate void* PlaySpecificSoundDelegate(long a1, int idx);
 
@@ -101,17 +101,20 @@ namespace SmartAutoAdvance
         {
             SignatureHelper.Initialise(this);
 
-            this.pUIModuleInstance = UIModule.Instance();
+            this.pUIModuleInstance = new IntPtr(UIModule.Instance());
 
+            this.enableCutsceneInputModeHook?.Enable();
+            this.disableCutsceneInputModeHook?.Enable();
             this.playSpecificSoundHook?.Enable();
             this.loadSoundFileHook?.Enable();
             this.getResourceSyncHook?.Enable();
             this.getResourceAsyncHook?.Enable();
-
         }
 
         public void Dispose()
         {
+            this.enableCutsceneInputModeHook?.Dispose();
+            this.disableCutsceneInputModeHook?.Dispose();
             this.playSpecificSoundHook?.Dispose();
             this.loadSoundFileHook?.Dispose();
             this.getResourceSyncHook?.Dispose();
@@ -120,6 +123,8 @@ namespace SmartAutoAdvance
 
         internal void Disable()
         {
+            this.enableCutsceneInputModeHook?.Disable();
+            this.disableCutsceneInputModeHook?.Disable();
             this.playSpecificSoundHook?.Disable();
             this.loadSoundFileHook?.Disable();
             this.getResourceSyncHook?.Disable();
@@ -128,7 +133,7 @@ namespace SmartAutoAdvance
 
         public void EnableCutsceneInputMode()
         {
-            this.enableCutsceneInputModeHook!.Original(this.pUIModuleInstance, 35); // figure out what a2 is
+            this.enableCutsceneInputModeHook!.Original(this.pUIModuleInstance, 35); // figure out what a2 is, "35" is irrelevant
 
             return;
         }
@@ -140,16 +145,16 @@ namespace SmartAutoAdvance
             return;
         }
 
-        private nint EnableCutsceneInputModeDetour(UIModule* pUIModule, nint a2)
+        private nint EnableCutsceneInputModeDetour(IntPtr pUIModule, nint a2)
         {
-            PluginLog.Information($"Client: EnableCutsceneInputMode(a1: {*pUIModule}, a2: {a2})", *pUIModule, a2);
+            PluginLog.Information($"Client: EnableCutsceneInputMode(a1: {pUIModule}, a2: {a2})", pUIModule, a2);
 
             return this.enableCutsceneInputModeHook!.Original(pUIModule, a2);
         }
 
-        private nint DisableCutsceneInputModeDetour(UIModule* pUIModule)
+        private nint DisableCutsceneInputModeDetour(IntPtr pUIModule)
         {
-            PluginLog.Information($"Client: DisableCutsceneInputMode(a1: {*pUIModule})", *pUIModule);
+            PluginLog.Information($"Client: DisableCutsceneInputMode(a1: {pUIModule})", pUIModule);
 
             return this.disableCutsceneInputModeHook!.Original(pUIModule);
         }
