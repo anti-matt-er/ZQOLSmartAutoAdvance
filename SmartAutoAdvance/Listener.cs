@@ -29,8 +29,8 @@ namespace SmartAutoAdvance
 
             this.InNewCutscene = false;
 
-            // Disabled on game start for consistent results
-            this.clientFunctions.AutoAdvanceEnabled = false;
+            // Because true/false of the client function is cursed
+            this.clientFunctions.SetInitialAutoAdvance();
         }
 
         internal void Enable()

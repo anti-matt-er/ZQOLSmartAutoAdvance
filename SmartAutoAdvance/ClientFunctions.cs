@@ -76,7 +76,7 @@ namespace SmartAutoAdvance
                 {
                     autoAdvanceEnabled = value;
 
-                    this.ToggleAutoAdvance(value);
+                    this.ToggleAutoAdvance();
 
                     PluginLog.LogInformation($"Auto-advance set to [{value}]", value);
                 }
@@ -113,12 +113,23 @@ namespace SmartAutoAdvance
             this.getResourceAsyncHook?.Disable();
         }
 
-        public void ToggleAutoAdvance(bool value)
+        public void SetInitialAutoAdvance()
         {
             if (this.toggleAutoAdvanceDelegate == null)
                 throw new InvalidOperationException("ToggleAutoAdvance signature wasn't found!");
 
             this.toggleAutoAdvanceDelegate(this.pCutsceneAgent, 0, false);
+
+            return;
+        }
+
+        private void ToggleAutoAdvance()
+        {
+            if (this.toggleAutoAdvanceDelegate == null)
+                throw new InvalidOperationException("ToggleAutoAdvance signature wasn't found!");
+
+            this.toggleAutoAdvanceDelegate(this.pCutsceneAgent, 0, false);
+            this.toggleAutoAdvanceDelegate(this.pCutsceneAgent, 0, true);
 
             return;
         }
