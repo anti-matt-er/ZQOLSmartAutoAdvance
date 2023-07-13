@@ -1,7 +1,6 @@
 using System;
 using System.Text.RegularExpressions;
 using Dalamud.Game.ClientState.Conditions;
-using Dalamud.Game.ClientState.Party;
 using Dalamud.Logging;
 
 namespace SmartAutoAdvance
