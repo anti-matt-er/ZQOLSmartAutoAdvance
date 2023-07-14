@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="512" height="512" src="images/icon.png">
+  <img width="256" height="256" src="images/icon.png">
 </p>
 
 # Smart Text Auto-Advance Plugin
