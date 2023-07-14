@@ -63,7 +63,6 @@ public class ConfigWindow : Window, IDisposable
         if (ImGui.Checkbox("Enable Auto-Advance for unvoiced cutscenes when in a party", ref enabledInParty))
         {
             this.configuration.ForceEnableInParty = enabledInParty;
-            // can save immediately on change, if you don't want to provide a "Save and Close" button
             this.configuration.Save();
         }
     }
