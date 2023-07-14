@@ -20,6 +20,7 @@ public class ConfigWindow : Window, IDisposable
     {
         this.Plugin = plugin;
 
+        // Consider saving the window size to config if ever more configuration options are needed
         this.Size = new Vector2(MinWidth, MinHeight);
         this.SizeConstraints = new WindowSizeConstraints
         {
