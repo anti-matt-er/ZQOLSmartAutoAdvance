@@ -26,7 +26,7 @@ public class ConfigWindow : Window, IDisposable
             MinimumSize = new Vector2(MinWidth, MinHeight),
             MaximumSize = new Vector2(uint.MaxValue, uint.MaxValue)
         };
-        this.SizeCondition = ImGuiCond.Always;
+        this.SizeCondition = ImGuiCond.FirstUseEver;
 
         this.configuration = plugin.Configuration;
     }
