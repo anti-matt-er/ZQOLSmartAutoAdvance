@@ -11,16 +11,20 @@ public class ConfigWindow : Window, IDisposable
 
     private SmartAutoAdvancePlugin Plugin { get; }
 
+    private const uint MinWidth = 390;
+    private const uint MinHeight = 85;
+
     public ConfigWindow(SmartAutoAdvancePlugin plugin) : base(
         "Smart Text Auto-Advance Configuration",
         ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse)
     {
         this.Plugin = plugin;
 
-        this.Size = new Vector2(390, 85);
+        this.Size = new Vector2(MinWidth, MinHeight);
         this.SizeConstraints = new WindowSizeConstraints
         {
-            MinimumSize = (Vector2)this.Size
+            MinimumSize = new Vector2(MinWidth, MinHeight),
+            MaximumSize = new Vector2(uint.MaxValue, uint.MaxValue)
         };
         this.SizeCondition = ImGuiCond.Always;
 
