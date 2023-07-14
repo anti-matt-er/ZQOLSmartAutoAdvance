@@ -8,5 +8,5 @@ When a cutscene is started, the plugin will disable Auto-Advance. Then it "liste
 
 ## Commands
 
-- `/staa` or `/SmartTextAutoAdvance` to open the configuration window 
-- `/staa toggle` or `/SmartTextAutoAdvance toggle` to manually toggle Text Auto-Advance between enabled/disabled
+- `/staa` or `/smarttextautoadvance` to open the configuration window 
+- `/staa toggle` or `/smarttextautoadvance toggle` to manually toggle Text Auto-Advance between enabled/disabled
