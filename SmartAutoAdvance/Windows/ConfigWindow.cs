@@ -33,6 +33,12 @@ public class ConfigWindow : Window, IDisposable
 
     public void Dispose() { }
 
+    public override void OnClose()
+    {
+        base.OnClose();
+        this.configuration.Save();
+    }
+
     public override void Draw()
     {
         var enabled = this.configuration.Enabled;
