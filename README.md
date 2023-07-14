@@ -1,3 +1,7 @@
+<p align="center">
+  <img width="512" height="512" src="images/icon.png">
+</p>
+
 # Smart Text Auto-Advance Plugin
 
 A quality-of-life plugin that automatically toggles FFXIV's "Text Auto-Advance" feature depending on whether or not the cutscene is voiced.
