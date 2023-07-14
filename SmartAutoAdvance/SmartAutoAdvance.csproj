@@ -20,12 +20,12 @@
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
   </PropertyGroup>
 
-  <!--THIS IS HOW YOU INCLUDE ASSETS: <ItemGroup>
-    <Content Include="..\Data\goat.png">
+  <ItemGroup>
+    <Content Include="..\images\icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Visible>false</Visible>
+      <TargetPath>\images\icon.png</TargetPath>
     </Content>
-  </ItemGroup>-->
+  </ItemGroup>
 
   <PropertyGroup>
     <DalamudLibPath>$(appdata)\XIVLauncher\addon\Hooks\dev\</DalamudLibPath>
