@@ -6,6 +6,7 @@ using FFXIVClientStructs.FFXIV.Client.System.Resource.Handle;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using System;
 using System.Collections.Concurrent;
+using System.IO;
 using System.Runtime.InteropServices;
 
 namespace SmartAutoAdvance
@@ -79,8 +80,9 @@ namespace SmartAutoAdvance
                     this.autoAdvanceEnabled = value;
 
                     this.ToggleAutoAdvance();
-
-                    PluginLog.LogInformation($"Auto-advance set to [{value}]", value);
+#if DEBUG
+                    PluginLog.Verbose($"Auto-advance set to [{value}]", value);
+#endif
                 }
 
                 return;
@@ -135,8 +137,9 @@ namespace SmartAutoAdvance
 
         private nint EnableCutsceneInputModeDetour(IntPtr pUIModule, nint a2)
         {
+#if DEBUG
             PluginLog.Verbose($"Client: EnableCutsceneInputMode(a1: {pUIModule}, a2: {a2})", pUIModule, a2);
-
+#endif
             this.OnCutsceneStarted?.Invoke();
 
             return this.enableCutsceneInputModeHook!.Original(pUIModule, a2);
@@ -165,8 +168,9 @@ namespace SmartAutoAdvance
 
                 path = path.ToLowerInvariant();
 #if DEBUG
-                PluginLog.Information($".scd played: {path}", path);
+                PluginLog.Verbose($".scd played: {path}", path);
 #endif
+
                 this.OnPlaySpecificSound?.Invoke(new PlaySpecificSoundEventArgs(path, idx));
             }
             catch (Exception ex)
