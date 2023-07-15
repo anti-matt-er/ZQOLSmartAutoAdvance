@@ -33,7 +33,7 @@ namespace SmartAutoAdvance
         public void Enable()
         {
             this.Plugin.Condition.ConditionChange += OnConditionChanged;
-            this.clientFunctions.PlaySpecificSoundEvent += OnPlaySpecificSound;
+            this.clientFunctions.OnPlaySpecificSound += OnPlaySpecificSound;
         }
 
         public void Disable()
@@ -44,7 +44,7 @@ namespace SmartAutoAdvance
         public void Dispose()
         {
             this.Plugin.Condition.ConditionChange -= OnConditionChanged;
-            this.clientFunctions.PlaySpecificSoundEvent -= OnPlaySpecificSound;
+            this.clientFunctions.OnPlaySpecificSound -= OnPlaySpecificSound;
 
             this.clientFunctions.Dispose();
         }
@@ -87,7 +87,7 @@ namespace SmartAutoAdvance
             }
         }
 
-        private void OnPlaySpecificSound(object? sender, PlaySpecificSoundEventArgs e)
+        private void OnPlaySpecificSound(PlaySpecificSoundEventArgs e)
         {
             if (!this.InNewCutscene)
             {

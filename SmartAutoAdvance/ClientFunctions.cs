@@ -61,14 +61,9 @@ namespace SmartAutoAdvance
 
         private ConcurrentDictionary<IntPtr, string> Scds { get; } = new();
 
-        public EventHandler<PlaySpecificSoundEventArgs> PlaySpecificSoundEvent = null!;
+        public event Action<PlaySpecificSoundEventArgs> OnPlaySpecificSound = null!;
 
-        public event Action OnCutsceneStartedEvent = null!;
-
-        private void OnPlaySpecificSoundEvent(PlaySpecificSoundEventArgs e)
-        {
-            PlaySpecificSoundEvent.Invoke(this, e);
-        }
+        public event Action OnCutsceneStarted = null!;
 
         private bool autoAdvanceEnabled = false;
         public bool AutoAdvanceEnabled
@@ -142,7 +137,7 @@ namespace SmartAutoAdvance
         {
             PluginLog.Verbose($"Client: EnableCutsceneInputMode(a1: {pUIModule}, a2: {a2})", pUIModule, a2);
 
-            this.OnCutsceneStartedEvent?.Invoke();
+            this.OnCutsceneStarted?.Invoke();
 
             return this.enableCutsceneInputModeHook!.Original(pUIModule, a2);
         }
@@ -172,7 +167,7 @@ namespace SmartAutoAdvance
 #if DEBUG
                 PluginLog.Information($".scd played: {path}", path);
 #endif
-                OnPlaySpecificSoundEvent(new PlaySpecificSoundEventArgs(path, idx));
+                OnPlaySpecificSound?.Invoke(new PlaySpecificSoundEventArgs(path, idx));
             }
             catch (Exception ex)
             {
