@@ -33,6 +33,7 @@ namespace SmartAutoAdvance
         public void Enable()
         {
             this.Plugin.Condition.ConditionChange += this.OnConditionChanged;
+            this.clientFunctions.OnCutsceneStarted += this.OnCutsceneStarted;
             this.clientFunctions.OnPlaySpecificSound += this.OnPlaySpecificSound;
         }
 
@@ -44,6 +45,7 @@ namespace SmartAutoAdvance
         public void Dispose()
         {
             this.Plugin.Condition.ConditionChange -= this.OnConditionChanged;
+            this.clientFunctions.OnCutsceneStarted -= this.OnCutsceneStarted;
             this.clientFunctions.OnPlaySpecificSound -= this.OnPlaySpecificSound;
 
             this.clientFunctions.Dispose();
@@ -69,21 +71,31 @@ namespace SmartAutoAdvance
             {
                 if (value)
                 {
-                    if (this.Plugin.Configuration.ForceEnableInParty && this.IsInPartyWithOthers)
-                    {
-                        PluginLog.Information("Cutscene started in a party, enabling auto-advance!");
-
-                        this.clientFunctions.AutoAdvanceEnabled = true;
-                    }
-                    else
-                    {
-                        PluginLog.Information("Cutscene started, disabling auto-advance!");
-
-                        this.clientFunctions.AutoAdvanceEnabled = false;
-                    }
+                    this.OnCutsceneStarted();
                 }
 
                 this.InNewCutscene = value;
+            }
+        }
+
+        private void OnCutsceneStarted()
+        {
+            if (!this.InNewCutscene)
+            {
+                return;
+            }
+
+            if (this.Plugin.Configuration.ForceEnableInParty && this.IsInPartyWithOthers)
+            {
+                PluginLog.Information("Cutscene started in a party, enabling auto-advance!");
+
+                this.clientFunctions.AutoAdvanceEnabled = true;
+            }
+            else
+            {
+                PluginLog.Information("Cutscene started, disabling auto-advance!");
+
+                this.clientFunctions.AutoAdvanceEnabled = false;
             }
         }
 
