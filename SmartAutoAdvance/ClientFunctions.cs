@@ -31,6 +31,8 @@ namespace SmartAutoAdvance
 
         private delegate nint ToggleAutoAdvanceDelegate(IntPtr pAgent, uint togglePause, bool toggleAutoAdvance);
 
+        private delegate nint EnableCutsceneInputModeDelegate(IntPtr pUIModule, nint a2);
+
         private delegate void* PlaySpecificSoundDelegate(long a1, int idx);
 
         private delegate void* GetResourceSyncPrototype(IntPtr pFileManager, uint* pCategoryId, char* pResourceType, uint* pResourceHash, char* pPath, void* pUnknown);
@@ -41,6 +43,9 @@ namespace SmartAutoAdvance
 
         [Signature("48 89 5C 24 08 48 89 74 24 10 57 48 83 EC 20 48 8B 49 10 41 0F B6 F0")]
         private readonly ToggleAutoAdvanceDelegate? toggleAutoAdvanceDelegate = null;
+
+        [Signature("48 89 5C 24 ?? 57 48 83 EC 20 48 8D 99 ?? ?? ?? ?? 48 8B F9 80 7B 25 00", DetourName = nameof(EnableCutsceneInputModeDetour))]
+        private readonly Hook<EnableCutsceneInputModeDelegate>? enableCutsceneInputModeHook = null;
 
         [Signature("48 89 5C 24 ?? 48 89 74 24 ?? 57 48 83 EC 20 33 F6 8B DA 48 8B F9 0F BA E2 0F", DetourName=nameof(PlaySpecificSoundDetour))]
         private readonly Hook<PlaySpecificSoundDelegate>? playSpecificSoundHook = null;
@@ -57,6 +62,8 @@ namespace SmartAutoAdvance
         private ConcurrentDictionary<IntPtr, string> Scds { get; } = new();
 
         public EventHandler<PlaySpecificSoundEventArgs> PlaySpecificSoundEvent = null!;
+
+        public event Action OnCutsceneStartedEvent = null!;
 
         private void OnPlaySpecificSoundEvent(PlaySpecificSoundEventArgs e)
         {
@@ -91,6 +98,7 @@ namespace SmartAutoAdvance
 
             this.pCutsceneAgent = new IntPtr(Framework.Instance()->GetUiModule()->GetAgentModule()->GetAgentByInternalId(AgentId.Cutscene));
 
+            this.enableCutsceneInputModeHook?.Enable();
             this.playSpecificSoundHook?.Enable();
             this.loadSoundFileHook?.Enable();
             this.getResourceSyncHook?.Enable();
@@ -99,6 +107,7 @@ namespace SmartAutoAdvance
 
         public void Dispose()
         {
+            this.enableCutsceneInputModeHook?.Dispose();
             this.playSpecificSoundHook?.Dispose();
             this.loadSoundFileHook?.Dispose();
             this.getResourceSyncHook?.Dispose();
@@ -107,6 +116,7 @@ namespace SmartAutoAdvance
 
         internal void Disable()
         {
+            this.enableCutsceneInputModeHook?.Disable();
             this.playSpecificSoundHook?.Disable();
             this.loadSoundFileHook?.Disable();
             this.getResourceSyncHook?.Disable();
@@ -126,6 +136,15 @@ namespace SmartAutoAdvance
             this.toggleAutoAdvanceDelegate(this.pCutsceneAgent, 0, value);
 
             return;
+        }
+
+        private nint EnableCutsceneInputModeDetour(IntPtr pUIModule, nint a2)
+        {
+            PluginLog.Verbose($"Client: EnableCutsceneInputMode(a1: {pUIModule}, a2: {a2})", pUIModule, a2);
+
+            this.OnCutsceneStartedEvent?.Invoke();
+
+            return this.enableCutsceneInputModeHook!.Original(pUIModule, a2);
         }
 
         private void* PlaySpecificSoundDetour(long a1, int idx)
