@@ -59,9 +59,9 @@ namespace SmartAutoAdvance
             this.Configuration = this.PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
             this.Configuration.Initialize(this.PluginInterface);
 
-            ConfigWindow = new ConfigWindow(this);
-            
-            WindowSystem.AddWindow(ConfigWindow);
+            this.ConfigWindow = new ConfigWindow(this);
+
+            this.WindowSystem.AddWindow(this.ConfigWindow);
 
             this.Listener = new Listener(this);
             if (this.Configuration.Enabled)
@@ -81,13 +81,13 @@ namespace SmartAutoAdvance
         {
             this.WindowSystem.RemoveAllWindows();
             
-            ConfigWindow.Dispose();
+            this.ConfigWindow.Dispose();
             
             this.CommandManager.RemoveHandler(ShortCommandName);
             this.CommandManager.RemoveHandler(LongCommandName);
 
-            this.PluginInterface.UiBuilder.Draw -= DrawUI;
-            this.PluginInterface.UiBuilder.OpenConfigUi -= DrawConfigUI;
+            this.PluginInterface.UiBuilder.Draw -= this.DrawUI;
+            this.PluginInterface.UiBuilder.OpenConfigUi -=  DrawConfigUI;
 
             this.Listener.Dispose();
         }
@@ -97,7 +97,7 @@ namespace SmartAutoAdvance
             // Toggle config window when no args are used
             if (args == "")
             {
-                ConfigWindow.IsOpen = !ConfigWindow.IsOpen;
+                this.ConfigWindow.IsOpen = !this.ConfigWindow.IsOpen;
             }
 
             if (args.ToLower() == "toggle")
@@ -113,7 +113,7 @@ namespace SmartAutoAdvance
 
         public void DrawConfigUI()
         {
-            ConfigWindow.IsOpen = !ConfigWindow.IsOpen;
+            this.ConfigWindow.IsOpen = !this.ConfigWindow.IsOpen;
         }
     }
-}
+}   

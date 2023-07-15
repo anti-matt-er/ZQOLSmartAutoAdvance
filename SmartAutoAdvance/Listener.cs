@@ -32,8 +32,8 @@ namespace SmartAutoAdvance
 
         public void Enable()
         {
-            this.Plugin.Condition.ConditionChange += OnConditionChanged;
-            this.clientFunctions.OnPlaySpecificSound += OnPlaySpecificSound;
+            this.Plugin.Condition.ConditionChange += this.OnConditionChanged;
+            this.clientFunctions.OnPlaySpecificSound += this.OnPlaySpecificSound;
         }
 
         public void Disable()
@@ -43,8 +43,8 @@ namespace SmartAutoAdvance
 
         public void Dispose()
         {
-            this.Plugin.Condition.ConditionChange -= OnConditionChanged;
-            this.clientFunctions.OnPlaySpecificSound -= OnPlaySpecificSound;
+            this.Plugin.Condition.ConditionChange -= this.OnConditionChanged;
+            this.clientFunctions.OnPlaySpecificSound -= this.OnPlaySpecificSound;
 
             this.clientFunctions.Dispose();
         }
@@ -69,7 +69,7 @@ namespace SmartAutoAdvance
             {
                 if (value)
                 {
-                    if (this.Plugin.Configuration.ForceEnableInParty && IsInPartyWithOthers)
+                    if (this.Plugin.Configuration.ForceEnableInParty && this.IsInPartyWithOthers)
                     {
                         PluginLog.Information("Cutscene started in a party, enabling auto-advance!");
 

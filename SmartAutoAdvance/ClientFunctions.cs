@@ -70,13 +70,13 @@ namespace SmartAutoAdvance
         {
             get
             {
-                return autoAdvanceEnabled;
+                return this.autoAdvanceEnabled;
             }
             set
             {
-                if (autoAdvanceEnabled != value)
+                if (this.autoAdvanceEnabled != value)
                 {
-                    autoAdvanceEnabled = value;
+                    this.autoAdvanceEnabled = value;
 
                     this.ToggleAutoAdvance();
 
@@ -167,7 +167,7 @@ namespace SmartAutoAdvance
 #if DEBUG
                 PluginLog.Information($".scd played: {path}", path);
 #endif
-                OnPlaySpecificSound?.Invoke(new PlaySpecificSoundEventArgs(path, idx));
+                this.OnPlaySpecificSound?.Invoke(new PlaySpecificSoundEventArgs(path, idx));
             }
             catch (Exception ex)
             {
