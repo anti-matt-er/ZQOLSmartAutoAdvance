@@ -128,7 +128,9 @@ namespace SmartAutoAdvance
         private void SetAutoAdvance(bool value)
         {
             if (this.toggleAutoAdvanceDelegate == null)
+            {
                 throw new InvalidOperationException("ToggleAutoAdvance signature wasn't found!");
+            }
 
             this.toggleAutoAdvanceDelegate(this.pCutsceneAgent, 0, value);
 
