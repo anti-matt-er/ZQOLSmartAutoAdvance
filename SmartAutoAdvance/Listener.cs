@@ -80,7 +80,7 @@ namespace SmartAutoAdvance
 
         private void OnCutsceneStarted()
         {
-            if (!this.InNewCutscene)
+            if (this.InNewCutscene)
             {
                 return;
             }
