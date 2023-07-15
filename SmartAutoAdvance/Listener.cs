@@ -73,8 +73,10 @@ namespace SmartAutoAdvance
                 {
                     this.OnCutsceneStarted();
                 }
-
-                this.InNewCutscene = value;
+                else
+                {
+                    this.InNewCutscene = false;
+                }
             }
         }
 
@@ -97,6 +99,8 @@ namespace SmartAutoAdvance
 
                 this.clientFunctions.AutoAdvanceEnabled = false;
             }
+
+            this.InNewCutscene = true;
         }
 
         private void OnPlaySpecificSound(PlaySpecificSoundEventArgs e)
