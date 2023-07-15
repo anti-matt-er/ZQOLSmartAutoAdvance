@@ -61,7 +61,7 @@ namespace SmartAutoAdvance
         private void OnConditionChanged(ConditionFlag flag, bool value)
         {
 #if DEBUG
-            PluginLog.Information($"Flag [{flag}] changed to [{value}]", flag, value);
+            PluginLog.Verbose($"Flag [{flag}] changed to [{value}]", flag, value);
 #endif
             if (value != this.InNewCutscene && (
                 flag == ConditionFlag.WatchingCutscene ||
