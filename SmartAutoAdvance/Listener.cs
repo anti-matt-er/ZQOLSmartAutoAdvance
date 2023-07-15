@@ -28,9 +28,6 @@ namespace SmartAutoAdvance
             this.Plugin = plugin;
 
             this.InNewCutscene = false;
-
-            // To achieve consistent results, we set it to false upon plugin load
-            this.clientFunctions.SetAutoAdvance(false);
         }
 
         public void Enable()
