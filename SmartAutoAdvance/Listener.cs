@@ -56,6 +56,11 @@ namespace SmartAutoAdvance
             this.clientFunctions.AutoAdvanceEnabled = !this.clientFunctions.AutoAdvanceEnabled;
         }
 
+        public void LogAutoAdvance()
+        {
+            PluginLog.Information($"Client Auto-Advance is currently: {this.clientFunctions.AutoAdvanceEnabled}");
+        }
+
         private bool IsInPartyWithOthers => this.Plugin.PartyList is { Length: > 1 };
 
         private void OnConditionChanged(ConditionFlag flag, bool value)

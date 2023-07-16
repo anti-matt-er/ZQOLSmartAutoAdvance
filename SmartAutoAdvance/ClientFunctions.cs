@@ -1,6 +1,7 @@
 using Dalamud.Hooking;
 using Dalamud.Logging;
 using Dalamud.Utility.Signatures;
+using Dalamud.Utility.Numerics;
 using FFXIVClientStructs.FFXIV.Client.System.Framework;
 using FFXIVClientStructs.FFXIV.Client.System.Resource.Handle;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
@@ -30,6 +31,8 @@ namespace SmartAutoAdvance
 
         private const int ResourceDataPointerOffset = 0xB0;
 
+        private delegate byte GetAutoAdvanceDelegate(IntPtr pAgent);
+
         private delegate nint ToggleAutoAdvanceDelegate(IntPtr pAgent, uint togglePause, bool toggleAutoAdvance);
 
         private delegate nint EnableCutsceneInputModeDelegate(IntPtr pUIModule, nint a2);
@@ -41,6 +44,9 @@ namespace SmartAutoAdvance
         private delegate void* GetResourceAsyncPrototype(IntPtr pFileManager, uint* pCategoryId, char* pResourceType, uint* pResourceHash, char* pPath, void* pUnknown, bool isUnknown);
 
         private delegate IntPtr LoadSoundFileDelegate(IntPtr resourceHandle, uint a2);
+
+        [Signature("E8 ?? ?? ?? ?? 84 C0 75 0D B0 01 48 8B 5C 24 ?? 48 83 C4 20 5F C3 83 7B 70 00")]
+        private readonly GetAutoAdvanceDelegate? getAutoAdvanceDelegate = null;
 
         [Signature("48 89 5C 24 08 48 89 74 24 10 57 48 83 EC 20 48 8B 49 10 41 0F B6 F0")]
         private readonly ToggleAutoAdvanceDelegate? toggleAutoAdvanceDelegate = null;
@@ -71,10 +77,18 @@ namespace SmartAutoAdvance
         {
             get
             {
+                // We have to check the current client setting of auto-advance because:
+                // a) we cannot infer an initial value
+                // b) the player may change it in-game at any time
+                this.autoAdvanceEnabled = this.GetAutoAdvance();
+
                 return this.autoAdvanceEnabled;
             }
             set
             {
+                // Just as in get, we have to check the current client setting
+                this.autoAdvanceEnabled = this.GetAutoAdvance();
+
                 if (this.autoAdvanceEnabled != value)
                 {
                     this.autoAdvanceEnabled = value;
@@ -120,19 +134,30 @@ namespace SmartAutoAdvance
             this.getResourceAsyncHook?.Disable();
         }
 
-        private void ToggleAutoAdvance()
+        private bool GetAutoAdvance()
         {
-            this.SetAutoAdvance(true);
+            if (this.getAutoAdvanceDelegate == null)
+            {
+                throw new InvalidOperationException("GetAutoAdvance signature wasn't found!");
+            }
+#if DEBUG
+            var currentState = this.getAutoAdvanceDelegate(this.pCutsceneAgent);
+            PluginLog.Verbose($"{currentState}");
+
+            return currentState != 0;
+#endif
+            return this.getAutoAdvanceDelegate(this.pCutsceneAgent) != 0;
         }
 
-        private void SetAutoAdvance(bool value)
+        private void ToggleAutoAdvance()
         {
             if (this.toggleAutoAdvanceDelegate == null)
             {
                 throw new InvalidOperationException("ToggleAutoAdvance signature wasn't found!");
             }
 
-            this.toggleAutoAdvanceDelegate(this.pCutsceneAgent, 0, value);
+            // True always toggles
+            this.toggleAutoAdvanceDelegate(this.pCutsceneAgent, 0, true);
 
             return;
         }

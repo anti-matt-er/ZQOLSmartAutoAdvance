@@ -100,9 +100,16 @@ namespace SmartAutoAdvance
                 this.ConfigWindow.IsOpen = !this.ConfigWindow.IsOpen;
             }
 
-            if (args.ToLower() == "toggle")
+            var subCommand = args.ToLower();
+
+            if (subCommand == "toggle")
             {
                 this.Listener.ToggleAutoAdvance();
+            }
+
+            else if (subCommand == "log")
+            {
+                this.Listener.LogAutoAdvance();
             }
         }
 
