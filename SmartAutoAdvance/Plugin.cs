@@ -27,9 +27,6 @@ namespace SmartAutoAdvance
         public SigScanner SigScanner { get; init; } = null!;
 
         [PluginService]
-        public Framework Framework { get; init; } = null!;
-
-        [PluginService]
         public Condition Condition { get; init; } = null!;
 
         [PluginService]
