@@ -15,7 +15,7 @@ When a cutscene is started, the plugin will disable Auto-Advance. Then it "liste
 - `/staa` or `/smarttextautoadvance` to open the configuration window 
 - `/staa toggle` or `/smarttextautoadvance toggle` to manually toggle Text Auto-Advance between enabled/disabled
 
-### Special thanks
+## Special thanks
 
 This plugin wouldn't have been possible without:
 - [Wintermute](https://github.com/pmgr) for his singular neuron that holds the most profound of reverse-engineering knowledge
@@ -25,4 +25,4 @@ This plugin wouldn't have been possible without:
 - [goatcorp](https://github.com/goatcorp) for Dalamud itself
 - [The entire plugin-dev discord community](https://discord.gg/3NMcUV5) for helping me every step of the way
 
-<sup>If I have forgotten anyone, let me know.</sup<
+<sup>If I have forgotten anyone, let me know.</sup>
