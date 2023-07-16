@@ -98,8 +98,6 @@ namespace SmartAutoAdvance
                     PluginLog.Verbose($"Auto-advance set to [{value}]", value);
 #endif
                 }
-
-                return;
             }
         }
 
@@ -158,8 +156,6 @@ namespace SmartAutoAdvance
 
             // True always toggles
             this.toggleAutoAdvanceDelegate(this.pCutsceneAgent, 0, true);
-
-            return;
         }
 
         private nint EnableCutsceneInputModeDetour(IntPtr pUIModule, nint a2)
