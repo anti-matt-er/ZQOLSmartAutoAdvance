@@ -112,12 +112,27 @@ namespace SmartAutoAdvance
 
             this.pCutsceneAgent = new IntPtr(Framework.Instance()->GetUiModule()->GetAgentModule()->GetAgentByInternalId(AgentId.Cutscene));
 
+            this.Enable();
+        }
+
+        public void Enable()
+        {
             this.enableCutsceneInputModeHook?.Enable();
             this.disableCutsceneInputModeHook?.Enable();
             this.playSpecificSoundHook?.Enable();
             this.loadSoundFileHook?.Enable();
             this.getResourceSyncHook?.Enable();
             this.getResourceAsyncHook?.Enable();
+        }
+
+        public void Disable()
+        {
+            this.enableCutsceneInputModeHook?.Disable();
+            this.disableCutsceneInputModeHook?.Disable();
+            this.playSpecificSoundHook?.Disable();
+            this.loadSoundFileHook?.Disable();
+            this.getResourceSyncHook?.Disable();
+            this.getResourceAsyncHook?.Disable();
         }
 
         public void Dispose()
@@ -128,16 +143,6 @@ namespace SmartAutoAdvance
             this.loadSoundFileHook?.Dispose();
             this.getResourceSyncHook?.Dispose();
             this.getResourceAsyncHook?.Dispose();
-        }
-
-        internal void Disable()
-        {
-            this.enableCutsceneInputModeHook?.Disable();
-            this.disableCutsceneInputModeHook?.Disable();
-            this.playSpecificSoundHook?.Disable();
-            this.loadSoundFileHook?.Disable();
-            this.getResourceSyncHook?.Disable();
-            this.getResourceAsyncHook?.Disable();
         }
 
         private bool GetAutoAdvance()

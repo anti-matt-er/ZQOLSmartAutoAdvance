@@ -35,10 +35,16 @@ namespace SmartAutoAdvance
             this.Plugin.Condition.ConditionChange += this.OnConditionChanged;
             this.clientFunctions.OnCutsceneChanged += this.OnCutsceneChanged;
             this.clientFunctions.OnPlaySpecificSound += this.OnPlaySpecificSound;
+
+            this.clientFunctions.Enable();
         }
 
         public void Disable()
         {
+            this.Plugin.Condition.ConditionChange -= this.OnConditionChanged;
+            this.clientFunctions.OnCutsceneChanged -= this.OnCutsceneChanged;
+            this.clientFunctions.OnPlaySpecificSound -= this.OnPlaySpecificSound;
+
             this.clientFunctions.Disable();
         }
 
