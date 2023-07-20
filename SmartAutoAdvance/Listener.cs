@@ -33,7 +33,7 @@ namespace SmartAutoAdvance
         public void Enable()
         {
             this.Plugin.Condition.ConditionChange += this.OnConditionChanged;
-            this.clientFunctions.OnCutsceneStarted += this.OnCutsceneStarted;
+            this.clientFunctions.OnCutsceneChanged += this.OnCutsceneChanged;
             this.clientFunctions.OnPlaySpecificSound += this.OnPlaySpecificSound;
         }
 
@@ -45,7 +45,7 @@ namespace SmartAutoAdvance
         public void Dispose()
         {
             this.Plugin.Condition.ConditionChange -= this.OnConditionChanged;
-            this.clientFunctions.OnCutsceneStarted -= this.OnCutsceneStarted;
+            this.clientFunctions.OnCutsceneChanged -= this.OnCutsceneChanged;
             this.clientFunctions.OnPlaySpecificSound -= this.OnPlaySpecificSound;
 
             this.clientFunctions.Dispose();
@@ -76,7 +76,7 @@ namespace SmartAutoAdvance
             {
                 if (value)
                 {
-                    this.OnCutsceneStarted();
+                    this.OnCutsceneChanged();
                 }
                 else
                 {
@@ -85,7 +85,7 @@ namespace SmartAutoAdvance
             }
         }
 
-        private void OnCutsceneStarted()
+        private void OnCutsceneChanged()
         {
             if (this.InNewCutscene)
             {
@@ -94,13 +94,13 @@ namespace SmartAutoAdvance
 
             if (this.Plugin.Configuration.ForceEnableInParty && this.IsInPartyWithOthers)
             {
-                PluginLog.Information("Cutscene started in a party, enabling auto-advance!");
+                PluginLog.Information("Cutscene started/ended in a party, enabling auto-advance!");
 
                 this.clientFunctions.AutoAdvanceEnabled = true;
             }
             else
             {
-                PluginLog.Information("Cutscene started, disabling auto-advance!");
+                PluginLog.Information("Cutscene started/ended, disabling auto-advance!");
 
                 this.clientFunctions.AutoAdvanceEnabled = false;
             }
